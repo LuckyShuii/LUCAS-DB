@@ -200,7 +200,8 @@ onMounted(async () => {
         <ul>
             <li v-for="(database, index) in databases" :key="database" class="db-item">
                 <button class="db button-no-style" @click="toggleTables(index)">
-                    <img src="../../assets/icons/menu-arrow.svg" class="menu-arrow" alt="arrow" />
+                    <img src="../../assets/icons/menu-arrow.svg"
+                        :class="activeDbIndex === index ? 'selected-arrow' : 'menu-arrow'" alt="arrow" />
                     <img src="../../assets/icons/db.svg" alt="Database" />
                     {{ database.database }}
                 </button>
@@ -233,6 +234,9 @@ onMounted(async () => {
 .db {
     margin: 0.5rem 0;
     font-weight: 400;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
 }
 
 .db-item {
@@ -241,6 +245,13 @@ onMounted(async () => {
 
 .menu-arrow {
     width: 5px;
+}
+
+.selected-arrow {
+    width: 5px;
+    margin-right: 10px;
+    transform: rotate(90deg);
+    transition: 0.3s;
 }
 
 .btn-add-table {
