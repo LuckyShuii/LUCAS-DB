@@ -37,6 +37,7 @@ button {
 button:hover {
   background-color: #2f5e4e;
   cursor: pointer;
+  transition: 0.3s;
 }
 
 button:active {
@@ -47,4 +48,18 @@ button > img {
   width: 15px;
   height: 15px;
   margin-right: 5px;
+}
+
+ul {
+  list-style: none;
+}
+
+.button-no-style, .button-no-style:hover, .button-no-style:active{
+  background-color: transparent;
+  border: none;
+  font-size: 14px;
+  font-weight: 300;
+  cursor: pointer;
+  color: black;
+  margin: 0;
 }
