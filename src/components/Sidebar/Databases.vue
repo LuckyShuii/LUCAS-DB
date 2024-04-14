@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
+const loaded = ref(false)
 const databases = ref([
     {
         database: 'Database 1',
@@ -187,16 +188,20 @@ const toggleTables = (index) => {
 
 const getDatabases = async () => {
     console.log('Getting databases')
+    const bruh = setTimeout(() => {
+        console.log('Databases loaded')
+    }, 20000)
+    return bruh
 }
 
 onMounted(async () => {
     await getDatabases()
-    console.log("bruh")
+    loaded.value = true
 })
 </script>
 
 <template>
-    <section id="databases">
+    <section id="databases" v-if="loaded">
         <ul>
             <li v-for="(database, index) in databases" :key="database" class="db-item">
                 <button class="db button-no-style" @click="toggleTables(index)">
