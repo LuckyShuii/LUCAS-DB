@@ -1,7 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 
-const loaded = ref(false)
+const loading = ref(true)
 const databases = ref([
     {
         database: 'Database 1',
@@ -188,20 +189,21 @@ const toggleTables = (index) => {
 
 const getDatabases = async () => {
     console.log('Getting databases')
-    const bruh = setTimeout(() => {
-        console.log('Databases loaded')
-    }, 20000)
-    return bruh
+    await new Promise(resolve => setTimeout(resolve, 2000))
 }
 
 onMounted(async () => {
     await getDatabases()
-    loaded.value = true
+    loading.value = false
 })
 </script>
 
 <template>
-    <section id="databases" v-if="loaded">
+    <section id="loader" v-if="loading">
+        <p>Chargement ...</p>
+        <pulse-loader :loading="loading" :color="color" :size="size"></pulse-loader>
+    </section>
+    <section id="databases" v-if="!loading">
         <ul>
             <li v-for="(database, index) in databases" :key="database" class="db-item">
                 <button class="db button-no-style" @click="toggleTables(index)">
@@ -242,6 +244,19 @@ onMounted(async () => {
     width: 100%;
     display: flex;
     justify-content: flex-start;
+}
+
+#loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10rem;
+    flex-direction: column;
+    text-align: center;
+}
+
+#loader p {
+    margin-bottom: 1rem;
 }
 
 .db-item {
