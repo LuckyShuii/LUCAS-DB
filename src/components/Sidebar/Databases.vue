@@ -179,6 +179,11 @@ const databases = ref([
         ]
     }
 ])
+const activeDbIndex = ref(-1)
+
+const toggleTables = (index) => {
+    activeDbIndex.value = activeDbIndex.value === index ? -1 : index;
+}
 
 const getDatabases = async () => {
     console.log('Getting databases')
@@ -193,8 +198,8 @@ onMounted(async () => {
 <template>
     <section id="databases">
         <ul>
-            <li v-for="database in databases" :key="database" class="db-item">
-                <button class="db button-no-style">
+            <li v-for="(database, index) in databases" :key="database" class="db-item">
+                <button class="db button-no-style" @click="toggleTables(index)">
                     <img src="../../assets/icons/menu-arrow.svg" class="menu-arrow" alt="arrow" />
                     <img src="../../assets/icons/db.svg" alt="Database" />
                     {{ database.database }}
@@ -204,7 +209,7 @@ onMounted(async () => {
                     ajouter une table
                 </button>
                 <ul>
-                    <li v-for="table in database.tables" :key="table">
+                    <li v-for="table in database.tables" :key="table" v-if="activeDbIndex === index">
                         <button class="table button-no-style"><img src="../../assets/icons/list-arrow.svg"
                                 alt="Table" />
                             {{ table.table }}
