@@ -13,7 +13,7 @@ const emit = defineEmits(['getDbName'])
 
 <style scoped>
 #sidebar {
-    width: 250px;
+    width: 270px;
     background-color: var(--secondary-color);
     min-height: calc(100vh - 35px);
 }

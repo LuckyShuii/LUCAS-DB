@@ -194,6 +194,15 @@ const getDatabases = async () => {
     await new Promise(resolve => setTimeout(resolve, 2000))
 }
 
+const setDbName = (event) => {
+    // si aucune base n'est sélectionnée, on emit pour mettre à une base vide
+    if (activeDbIndex.value === -1) {
+        emit('getDbName', '')
+        return
+    }
+    emit('getDbName', databases.value[activeDbIndex.value].database)
+}
+
 onMounted(async () => {
     await getDatabases()
     loading.value = false
@@ -207,8 +216,7 @@ onMounted(async () => {
     </section>
     <section id="databases" v-if="!loading">
         <ul>
-            <li v-for="(database, index) in databases" :key="database" class="db-item"
-                @click="emit('getDbName', database.database)">
+            <li v-for="(database, index) in databases" :key="database" class="db-item" @click="setDbName">
                 <button class="db button-no-style" @click="toggleTables(index)">
                     <img src="../../assets/icons/menu-arrow.svg"
                         :class="activeDbIndex === index ? 'selected-arrow' : 'menu-arrow'" alt="arrow" />

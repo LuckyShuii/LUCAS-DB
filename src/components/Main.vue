@@ -8,7 +8,7 @@ import { ref } from 'vue'
 
 const props = defineProps(['dbName'])
 
-const activeTab = ref()
+const activeTab = ref('query')
 
 const changeTab = (event) => {
     activeTab.value = event
@@ -28,6 +28,8 @@ const changeTab = (event) => {
 <style scoped>
 main {
     margin-top: 1rem;
+    margin-right: 1rem;
+    width: 100%;
 }
 
 .active {

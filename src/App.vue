@@ -9,7 +9,6 @@ const currentUser = ref('root')
 const dbName = ref()
 
 const setDbName = (name) => {
-  console.log(name)
   dbName.value = name
 }
 </script>
