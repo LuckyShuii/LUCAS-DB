@@ -16,6 +16,10 @@
             <img src="../../assets/icons/users.svg" alt="Add" />
             Users
         </button>
+        <button class="to-marge">
+            <img src="../../assets/icons/settings.svg" id="settings" alt="Add" />
+            Paramètres
+        </button>
     </section>
 </template>
 
@@ -27,5 +31,9 @@
 
 .to-marge {
     margin-left: 1rem;
+}
+
+#settings {
+    width: 11px;
 }
 </style>
