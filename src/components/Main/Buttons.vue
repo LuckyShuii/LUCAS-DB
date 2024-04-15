@@ -4,7 +4,11 @@ const emit = defineEmits(['activeTab'])
 
 <template>
     <section id="top-buttons">
-        <button id="query" @click="emit('activeTab', 'query')">
+        <button id="structure" @click="emit('activeTab', 'structure')">
+            <img src="../../assets/icons/structure.svg" alt="Add" />
+            Structure
+        </button>
+        <button class="to-marge" id="query" @click="emit('activeTab', 'query')">
             <img src="../../assets/icons/sql.svg" alt="Add" />
             Requête
         </button>

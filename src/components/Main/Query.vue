@@ -38,12 +38,6 @@ const runQuery = async () => {
 </script>
 
 <template>
-    <section class="query-section" v-if="!dbName">
-        <h2 id="main-title">
-            <img src="../../assets/icons/db.svg" alt="Add" />
-            Aucune base de données sélectionnée
-        </h2>
-    </section>
     <section class="query-section" v-if="dbName">
         <h2 id="main-title">
             <img src="../../assets/icons/db.svg" alt="Add" />
