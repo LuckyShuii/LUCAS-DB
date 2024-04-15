@@ -1,11 +1,13 @@
 <script setup>
 import Databases from '../components/Sidebar/Databases.vue'
+
+const emit = defineEmits(['getDbName'])
 </script>
 
 <template>
     <section id="sidebar">
         <h2>Mes bases de données</h2>
-        <Databases id="db" />
+        <Databases id="db" @getDbName="emit('getDbName', $event)" />
     </section>
 </template>
 

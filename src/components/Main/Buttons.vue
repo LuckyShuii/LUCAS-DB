@@ -1,22 +1,22 @@
 <script setup>
-
+const emit = defineEmits(['activeTab'])
 </script>
 
 <template>
     <section id="top-buttons">
-        <button id="query">
+        <button id="query" @click="emit('activeTab', 'query')">
             <img src="../../assets/icons/sql.svg" alt="Add" />
-            Query
+            Requête
         </button>
-        <button class="to-marge" id="import">
+        <button class="to-marge" id="import" @click="emit('activeTab', 'importer')">
             <img src="../../assets/icons/import.svg" alt="Add" />
-            Import
+            Importer
         </button>
-        <button class="to-marge" id="users">
+        <button class="to-marge" id="users" @click="emit('activeTab', 'utilisateurs')">
             <img src="../../assets/icons/users.svg" alt="Add" />
-            Users
+            Utilisateurs
         </button>
-        <button class="to-marge">
+        <button class="to-marge" @click="emit('activeTab', 'parametres')">
             <img src="../../assets/icons/settings.svg" id="settings" alt="Add" />
             Paramètres
         </button>

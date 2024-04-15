@@ -55,10 +55,10 @@ ul {
 .button-no-style, .button-no-style:hover, .button-no-style:active{
   background-color: transparent;
   border: none;
-  font-size: 14px;
-  font-weight: 300;
-  cursor: pointer;
-  color: black;
+font-size: 14px;
+font-weight: 300;
+cursor: pointer;
+color: black;
   margin: 0;
 }
 

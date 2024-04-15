@@ -2,6 +2,8 @@
 import { ref, onMounted } from 'vue'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 
+const emit = defineEmits(['getDbName'])
+
 const loading = ref(true)
 const databases = ref([
     {
@@ -205,7 +207,8 @@ onMounted(async () => {
     </section>
     <section id="databases" v-if="!loading">
         <ul>
-            <li v-for="(database, index) in databases" :key="database" class="db-item">
+            <li v-for="(database, index) in databases" :key="database" class="db-item"
+                @click="emit('getDbName', database.database)">
                 <button class="db button-no-style" @click="toggleTables(index)">
                     <img src="../../assets/icons/menu-arrow.svg"
                         :class="activeDbIndex === index ? 'selected-arrow' : 'menu-arrow'" alt="arrow" />
