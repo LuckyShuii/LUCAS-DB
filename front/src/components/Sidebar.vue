@@ -13,9 +13,10 @@ const emit = defineEmits(['getDbName'])
 
 <style scoped>
 #sidebar {
-    width: 270px;
+    width: 350px;
     background-color: var(--secondary-color);
-    min-height: calc(100vh - 35px);
+    height: calc(100vh - 35px);
+    overflow-y: scroll;
 }
 
 h2 {
