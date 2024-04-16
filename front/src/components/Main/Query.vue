@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 import axios from 'axios'
 
@@ -18,6 +18,29 @@ const resetQuery = () => {
     responseMessage.value = ''
 }
 
+watch(() => props.dbName, () => {
+    resetQuery()
+})
+
+const fillTextarea = (query) => {
+    switch (query) {
+        case 'SELECT':
+            textarea.value = 'SELECT * FROM table_name;'
+            break;
+        case 'INSERT':
+            textarea.value = 'INSERT INTO table_name (column1, column2, column3, ...) VALUES (value1, value2, value3, ...);'
+            break;
+        case 'UPDATE':
+            textarea.value = 'UPDATE table_name SET column1 = value1, column2 = value2, ... WHERE condition;'
+            break;
+        case 'DELETE':
+            textarea.value = 'DELETE FROM table_name WHERE condition;'
+            break;
+        default:
+            break;
+    }
+}
+
 const runQuery = async () => {
     if (textarea.value === '') {
         success.value = false
@@ -30,9 +53,6 @@ const runQuery = async () => {
             query: textarea.value,
             database: props.dbName
         });
-        console.log(textarea.value)
-        console.log(props.dbName)
-        console.log(response.data)
 
         if (response.data.error) {
             success.value = false
@@ -45,7 +65,6 @@ const runQuery = async () => {
         notification.value = 'Query executed successfully'
         responseMessage.value = response.data.result
     } catch (err) {
-        console.log(err)
         success.value = false
         notification.value = 'An error occurred'
         responseMessage.value = err.message
@@ -60,6 +79,20 @@ const runQuery = async () => {
             <img src="../../assets/icons/db.svg" alt="Add" />
             Base de données concernée :<span id="db-name"><a href="#">{{ dbName }}</a></span>
         </h2>
+        <section id="help-buttons">
+            <button @click="fillTextarea('SELECT')">
+                SELECT
+            </button>
+            <button class="marged" @click="fillTextarea('INSERT')">
+                INSERT
+            </button>
+            <button class="marged" @click="fillTextarea('UPDATE')">
+                UPDATE
+            </button>
+            <button class="marged" @click="fillTextarea('DELETE')">
+                DELETE
+            </button>
+        </section>
         <form action="" method="post" @submit.prevent="runQuery">
             <textarea v-model="textarea" name="query" id="query" cols="30" rows="10"></textarea>
             <div id="loader" v-if="loading">
@@ -87,6 +120,15 @@ const runQuery = async () => {
 </template>
 
 <style scoped>
+#help-buttons {
+    display: flex;
+    margin-top: 1rem;
+}
+
+.marged {
+    margin-left: 0.5rem;
+}
+
 #loader {
     margin-top: 1rem;
 }
