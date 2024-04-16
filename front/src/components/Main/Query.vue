@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
+import axios from 'axios'
 
 const props = defineProps(['dbName'])
 
@@ -21,19 +22,35 @@ const runQuery = async () => {
     if (textarea.value === '') {
         success.value = false
         notification.value = 'Query cannot be empty'
-        responseMessage.value = 'An error at line .. occurred'
         return
     }
-    disabled.value = true
-    success.value = ''
-    loading.value = true
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    loading.value = false
-    disabled.value = false
-    console.log(textarea.value)
-    success.value = true
-    notification.value = 'Query executed successfully'
-    responseMessage.value = 'Affected rows: 1'
+
+    try {
+        const response = await axios.post(`http://localhost:8000/api/query`, {
+            query: textarea.value,
+            database: props.dbName
+        });
+        console.log(textarea.value)
+        console.log(props.dbName)
+        console.log(response.data)
+
+        if (response.data.error) {
+            success.value = false
+            notification.value = 'An error occurred'
+            responseMessage.value = response.data.error
+            return;
+        }
+
+        success.value = true
+        notification.value = 'Query executed successfully'
+        responseMessage.value = response.data.result
+    } catch (err) {
+        console.log(err)
+        success.value = false
+        notification.value = 'An error occurred'
+        responseMessage.value = err.message
+        return;
+    }
 }
 </script>
 

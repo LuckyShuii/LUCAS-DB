@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/api')]
 class DatabaseController extends AbstractController
 {
-    #[Route('/databases', name: 'app_database')]
+    #[Route('/databases', name: 'app_database', methods: ['GET'])]
     public function index(Connection $connection): JsonResponse
     {
         $databases = $connection->fetchAllAssociative('SHOW DATABASES');
