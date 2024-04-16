@@ -18,7 +18,7 @@ const changeTab = (event) => {
 
 <template>
     <main>
-        <Buttons @active-tab="changeTab" />
+        <Buttons @active-tab="changeTab" :activeTab="activeTab" />
         <section class="db-check" v-if="!dbName">
             <h2 id="main-title">
                 <img src="../assets/icons/db.svg" alt="Add" />
