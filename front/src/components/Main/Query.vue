@@ -25,7 +25,7 @@ watch(() => props.dbName, () => {
 const fillTextarea = (query) => {
     switch (query) {
         case 'SELECT':
-            textarea.value = 'SELECT * FROM table_name;'
+            textarea.value = 'SELECT * FROM table_name WHERE condition;'
             break;
         case 'INSERT':
             textarea.value = 'INSERT INTO table_name (column1, column2, column3, ...) VALUES (value1, value2, value3, ...);'
