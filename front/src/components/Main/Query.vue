@@ -127,7 +127,7 @@ const runQuery = async () => {
                 <br>
                 {{ responseMessage }}
             </p>
-            <div class="table">
+            <div class="table notDisplayed" :class="{ 'displayed': success }">
                 <table v-if="success">
                     <tr v-if="responseMessage.length">
                         <th v-for="(value, key) in responseMessage[0]" :key="key">
@@ -146,6 +146,14 @@ const runQuery = async () => {
 </template>
 
 <style scoped>
+.notDisplayed {
+    display: none;
+}
+
+.displayed {
+    display: block;
+}
+
 table,
 th,
 td {
@@ -278,6 +286,5 @@ td {
     border: 1px solid #ccc;
     border-radius: 5px;
     resize: none;
-    padding-bottom: 1rem
 }
 </style>
