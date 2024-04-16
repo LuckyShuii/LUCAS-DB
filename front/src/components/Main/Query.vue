@@ -42,9 +42,12 @@ const fillTextarea = (query) => {
 }
 
 const runQuery = async () => {
+    loading.value = true
+
     if (textarea.value === '') {
         success.value = false
         notification.value = 'Query cannot be empty'
+        loading.value = false
         return
     }
 
@@ -53,6 +56,8 @@ const runQuery = async () => {
             query: textarea.value,
             database: props.dbName
         });
+
+        loading.value = false
 
         if (response.data.error) {
             success.value = false
@@ -65,6 +70,7 @@ const runQuery = async () => {
         notification.value = 'Query executed successfully'
         responseMessage.value = response.data.result
     } catch (err) {
+        loading.value = false
         success.value = false
         notification.value = 'An error occurred'
         responseMessage.value = err.message
@@ -94,20 +100,11 @@ const runQuery = async () => {
             </button>
         </section>
         <form action="" method="post" @submit.prevent="runQuery">
-            <textarea v-model="textarea" name="query" id="query" cols="30" rows="10"></textarea>
+            <textarea v-model="textarea" name="query" id="query" cols="30" rows="10"
+                @keydown.enter="runQuery"></textarea>
             <div id="loader" v-if="loading">
                 <pulse-loader :loading="loading" :color="color" :size="size"></pulse-loader>
             </div>
-            <p class="info-p success" v-if="success">
-                Success: {{ notification }}
-                <br>
-                {{ responseMessage }}
-            </p>
-            <p class="info-p fail" v-if="success !== '' && !success">
-                Error: {{ notification }}
-                <br>
-                {{ responseMessage }}
-            </p>
             <div class="buttons">
                 <button type="submit" id="execute-btn" :disabled="disabled">Exécuter</button>
                 <button type="reset" id="reset-btn" @click="resetQuery" :disabled="disabled">
@@ -115,11 +112,25 @@ const runQuery = async () => {
                     Réinitialiser
                 </button>
             </div>
+            <p class="info-p success" v-if="success">
+                Success: {{ notification }}
+                <br>
+            <pre class="sucess-response">{{ responseMessage }}</pre>
+            </p>
+            <p class="info-p fail" v-if="success !== '' && !success">
+                Error: {{ notification }}
+                <br>
+                {{ responseMessage }}
+            </p>
         </form>
     </section>
 </template>
 
 <style scoped>
+.sucess-response {
+    font-size: 13px;
+}
+
 #help-buttons {
     display: flex;
     margin-top: 1rem;
@@ -134,7 +145,7 @@ const runQuery = async () => {
 }
 
 .info-p {
-    margin-top: 0.5rem;
+    margin-top: 1rem;
     width: 100%;
     padding: 0.5rem;
     border-radius: 5px;
