@@ -28,4 +28,6 @@ change `.env` file, line `DATABASE_URL=` with the proper data of your database (
 
 `npm run dev`
 
-https://media.discordapp.net/attachments/1184761532693884960/1229889282236219463/image.png?ex=663152a7&is=661edda7&hm=4fcb1cbb2088bf3264a6af8f88cbc712f7e5459ab28090c1b133faec7af28a26&=&format=webp&quality=lossless&width=2566&height=1244
+# PREVIEW
+
+![Query TAB](https://media.discordapp.net/attachments/1184761532693884960/1229889282236219463/image.png?ex=663152a7&is=661edda7&hm=4fcb1cbb2088bf3264a6af8f88cbc712f7e5459ab28090c1b133faec7af28a26&=&format=webp&quality=lossless&width=2566&height=1244)
