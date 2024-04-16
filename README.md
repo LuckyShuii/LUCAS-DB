@@ -19,7 +19,7 @@ change `.env` file, line `DATABASE_URL=` with the proper data of your database
 
 ## Start Front
 
-`cd ..`
+`cd ..` if you are still in the `/api` directory
 
 `cd front`
 
