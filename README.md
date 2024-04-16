@@ -16,7 +16,7 @@ At the moment, this project only runs on MySQL. Using other databases may work b
 
 `composer install` : only the first time you run the project
 
-change `.env` file, line `DATABASE_URL=` with the proper data of your database
+change `.env` file, line `DATABASE_URL=` with the proper data of your database (in order to get the login info to run queries)
 
 `symfony server:start`
 
