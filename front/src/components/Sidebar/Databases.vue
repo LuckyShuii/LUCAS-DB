@@ -8,22 +8,24 @@ const emit = defineEmits(['getDbName'])
 const loading = ref(true)
 
 const activeDbIndex = ref(-1)
+const activeTableIndex = ref(-1)
 
 const databaseList = ref({})
 
 const getDatabaseList = async () => {
     try {
         databaseList.value = await axios.get("http://127.0.0.1:8000/api/databases");
-        console.log(databaseList.value)
     } catch (err) {
         console.log(err)
     }
 }
 
 const toggleTables = (index) => {
-    console.log(index)
-    console.log(databaseList.value.data.db_list[index])
     activeDbIndex.value = activeDbIndex.value === index ? -1 : index;
+}
+
+const toggleColumns = (index) => {
+    activeTableIndex.value = activeTableIndex.value === index ? -1 : index;
 }
 
 const setDbName = (event) => {
@@ -47,7 +49,8 @@ onMounted(async () => {
     </section>
     <section id="databases" v-if="!loading">
         <ul>
-            <li v-for="(db, index) in databaseList.data.db_list" :key="db.Database" class="db-item" @click="setDbName">
+            <li v-for="(db, index) in  databaseList.data.db_list " :key="db.Database" class="db-item"
+                @click="setDbName">
                 <button class="db button-no-style" @click="toggleTables(index)">
                     <img src="../../assets/icons/menu-arrow.svg"
                         :class="activeDbIndex === index ? 'selected-arrow' : 'menu-arrow'" alt="arrow" />
@@ -59,13 +62,13 @@ onMounted(async () => {
                     ajouter une table
                 </button>
                 <ul>
-                    <li v-for="table in db.tables" :key="table" v-if="activeDbIndex === index">
-                        <button class="table button-no-style"><img src="../../assets/icons/list-arrow.svg"
-                                alt="Table" />
+                    <li v-for="(table, index) in  db.tables " :key="table" v-if="activeDbIndex === index">
+                        <button class="table button-no-style" @click="toggleColumns(index)"><img
+                                src="../../assets/icons/list-arrow.svg" alt="Table" />
                             {{ table.table }}
                         </button>
-                        <ul>
-                            <li v-for="column in table.columns" :key="column">
+                        <ul v-if="activeTableIndex === index">
+                            <li v-for=" column  in  table.columns " :key="column">
                                 <button class="column button-no-style"><img src="../../assets/icons/list-arrow.svg"
                                         alt="Column" />
                                     {{ column.Field }}
