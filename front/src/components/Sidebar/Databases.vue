@@ -1,210 +1,41 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
+import axios from 'axios'
 
 const emit = defineEmits(['getDbName'])
 
 const loading = ref(true)
-const databases = ref([
-    {
-        database: 'Database 1',
-        tables: [
-            {
-                table: 'Table 1',
-                columns: [
-                    {
-                        column: 'Column 1',
-                        type: 'Type 1'
-                    }
-                ]
-            },
-            {
-                table: 'Table 2',
-                columns: [
-                    {
-                        column: 'Column 1',
-                        type: 'Type 1'
-                    },
-                    {
-                        column: 'Column 2',
-                        type: 'Type 2'
-                    }
-                ]
-            },
-            {
-                table: 'Table 3',
-                columns: [
-                    {
-                        column: 'Column 1',
-                        type: 'Type 1'
-                    },
-                    {
-                        column: 'Column 2',
-                        type: 'Type 2'
-                    },
-                    {
-                        column: 'Column 3',
-                        type: 'Type 3'
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        database: 'Database 2',
-        tables: [
-            {
-                table: 'Table 1',
-                columns: [
-                    {
-                        column: 'Column 1',
-                        type: 'Type 1'
-                    }
-                ]
-            },
-            {
-                table: 'Table 2',
-                columns: [
-                    {
-                        column: 'Column 1',
-                        type: 'Type 1'
-                    },
-                    {
-                        column: 'Column 2',
-                        type: 'Type 2'
-                    }
-                ]
-            },
-            {
-                table: 'Table 3',
-                columns: [
-                    {
-                        column: 'Column 1',
-                        type: 'Type 1'
-                    },
-                    {
-                        column: 'Column 2',
-                        type: 'Type 2'
-                    },
-                    {
-                        column: 'Column 3',
-                        type: 'Type 3'
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        database: 'Database 3',
-        tables: [
-            {
-                table: 'Table 1',
-                columns: [
-                    {
-                        column: 'Column 1',
-                        type: 'Type 1'
-                    }
-                ]
-            },
-            {
-                table: 'Table 2',
-                columns: [
-                    {
-                        column: 'Column 1',
-                        type: 'Type 1'
-                    },
-                    {
-                        column: 'Column 2',
-                        type: 'Type 2'
-                    }
-                ]
-            },
-            {
-                table: 'Table 3',
-                columns: [
-                    {
-                        column: 'Column 1',
-                        type: 'Type 1'
-                    },
-                    {
-                        column: 'Column 2',
-                        type: 'Type 2'
-                    },
-                    {
-                        column: 'Column 3',
-                        type: 'Type 3'
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        database: 'Database 4',
-        tables: [
-            {
-                table: 'Table 1',
-                columns: [
-                    {
-                        column: 'Column 1',
-                        type: 'Type 1'
-                    }
-                ]
-            },
-            {
-                table: 'Table 2',
-                columns: [
-                    {
-                        column: 'Column 1',
-                        type: 'Type 1'
-                    },
-                    {
-                        column: 'Column 2',
-                        type: 'Type 2'
-                    }
-                ]
-            },
-            {
-                table: 'Table 3',
-                columns: [
-                    {
-                        column: 'Column 1',
-                        type: 'Type 1'
-                    },
-                    {
-                        column: 'Column 2',
-                        type: 'Type 2'
-                    },
-                    {
-                        column: 'Column 3',
-                        type: 'Type 3'
-                    }
-                ]
-            }
-        ]
-    }
-])
+
 const activeDbIndex = ref(-1)
 
+const databaseList = ref({})
+
+const getDatabaseList = async () => {
+    try {
+        databaseList.value = await axios.get("http://127.0.0.1:8000/api/databases");
+        console.log(databaseList.value)
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 const toggleTables = (index) => {
+    console.log(index)
+    console.log(databaseList.value.data.db_list[index])
     activeDbIndex.value = activeDbIndex.value === index ? -1 : index;
 }
 
-const getDatabases = async () => {
-    console.log('Getting databases')
-    await new Promise(resolve => setTimeout(resolve, 2000))
-}
-
 const setDbName = (event) => {
-    // si aucune base n'est sélectionnée, on emit pour mettre à une base vide
     if (activeDbIndex.value === -1) {
         emit('getDbName', '')
         return
     }
-    emit('getDbName', databases.value[activeDbIndex.value].database)
+    emit('getDbName', databaseList.value.data.db_list[activeDbIndex.value].Database)
 }
 
 onMounted(async () => {
-    await getDatabases()
+    await getDatabaseList()
     loading.value = false
 })
 </script>
@@ -216,19 +47,19 @@ onMounted(async () => {
     </section>
     <section id="databases" v-if="!loading">
         <ul>
-            <li v-for="(database, index) in databases" :key="database" class="db-item" @click="setDbName">
+            <li v-for="(db, index) in databaseList.data.db_list" :key="db.Database" class="db-item" @click="setDbName">
                 <button class="db button-no-style" @click="toggleTables(index)">
                     <img src="../../assets/icons/menu-arrow.svg"
                         :class="activeDbIndex === index ? 'selected-arrow' : 'menu-arrow'" alt="arrow" />
                     <img src="../../assets/icons/db.svg" alt="Database" />
-                    {{ database.database }}
+                    {{ db.Database }}
                 </button>
                 <button class="btn-add-table button-no-style">
                     <img src="../../assets/icons/add.svg" alt="Add" />
                     ajouter une table
                 </button>
                 <ul>
-                    <li v-for="table in database.tables" :key="table" v-if="activeDbIndex === index">
+                    <li v-for="table in db.tables" :key="table" v-if="activeDbIndex === index">
                         <button class="table button-no-style"><img src="../../assets/icons/list-arrow.svg"
                                 alt="Table" />
                             {{ table.table }}
@@ -237,7 +68,7 @@ onMounted(async () => {
                             <li v-for="column in table.columns" :key="column">
                                 <button class="column button-no-style"><img src="../../assets/icons/list-arrow.svg"
                                         alt="Column" />
-                                    {{ column.column }}
+                                    {{ column.Field }}
                                 </button>
                             </li>
                         </ul>
