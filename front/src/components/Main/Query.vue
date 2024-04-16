@@ -120,18 +120,57 @@ const runQuery = async () => {
             <p class="info-p success" v-if="success">
                 Success: {{ notification }}
                 <br>
-            <pre class="sucess-response">{{ responseMessage }}</pre>
+                <span v-if="responseMessage.length == 0">No data found</span>
             </p>
             <p class="info-p fail" v-if="success !== '' && !success">
                 Error: {{ notification }}
                 <br>
                 {{ responseMessage }}
             </p>
+            <div class="table">
+                <table v-if="success">
+                    <tr v-if="responseMessage.length">
+                        <th v-for="(value, key) in responseMessage[0]" :key="key">
+                            {{ key }}
+                        </th>
+                    </tr>
+                    <tr v-for="(item, index) in responseMessage" :key="index">
+                        <td v-for="(value, key) in item" :key="key">
+                            {{ value }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </form>
     </section>
 </template>
 
 <style scoped>
+table,
+th,
+td {
+    border: 1px solid white;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    padding: 0.5rem;
+}
+
+
+.table {
+    margin-top: 1rem;
+    overflow-x: scroll;
+    max-height: calc(100vh - 540px);
+}
+
+th {
+    background-color: var(--main-color);
+    color: white;
+}
+
+td {
+    background-color: var(--secondary-color);
+}
+
 .sucess-response {
     font-size: 13px;
 }
@@ -162,6 +201,7 @@ const runQuery = async () => {
     color: white;
     max-height: calc(100vh - 540px);
     overflow-y: scroll;
+    margin-bottom: 1rem;
 }
 
 .fail {
@@ -228,10 +268,11 @@ const runQuery = async () => {
     border-radius: 5px;
     resize: none;
     outline: none;
+    height: 100px;
 }
 
 .query-section {
-    width: 100%;
+    max-width: 100%;
     margin-top: 1rem;
     padding: 0.5rem;
     border: 1px solid #ccc;

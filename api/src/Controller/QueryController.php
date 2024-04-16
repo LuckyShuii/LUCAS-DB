@@ -22,7 +22,7 @@ class QueryController extends AbstractController
         $query = $data['query'];
 
         try {
-            $connection->executeStatement('USE ' . $database);
+            $connection->executeStatement('USE `' . $database . '`');
             $result = $connection->fetchAllAssociative($query);
         } catch (\Exception $e) {
             return $this->json([

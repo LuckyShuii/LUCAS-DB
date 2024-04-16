@@ -37,7 +37,8 @@ const changeTab = (event) => {
 main {
     margin-top: 1rem;
     margin-right: 1rem;
-    width: 100%;
+    width: calc(100% - 350px);
+    height: calc(100vh - 100px);
 }
 
 .active {
