@@ -14,7 +14,7 @@ At the moment, this project only runs on MySQL. Using other databases may work b
 
 `cd api`
 
-`composer install`
+`composer install` : only the first time you run the project
 
 change `.env` file, line `DATABASE_URL=` with the proper data of your database
 
@@ -22,10 +22,8 @@ change `.env` file, line `DATABASE_URL=` with the proper data of your database
 
 ## Start Front
 
-`cd ..` if you are still in the `/api` directory
-
 `cd front`
 
-`npm install`
+`npm install` : only the first time you run the project
 
 `npm run dev`
