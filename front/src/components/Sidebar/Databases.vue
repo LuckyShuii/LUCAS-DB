@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 const emit = defineEmits(['getDbName'])
 
@@ -16,7 +17,16 @@ const getDatabaseList = async () => {
     try {
         databaseList.value = await axios.get("http://127.0.0.1:8000/api/databases");
     } catch (err) {
-        console.log(err)
+        Swal.fire({
+            title: 'Error!',
+            text: 'Your database list could not be fetched.',
+            icon: 'error',
+            timer: 10000,
+            position: 'top-right',
+            toast: true,
+            showConfirmButton: false,
+            showCloseButton: true
+        })
     }
 }
 
@@ -28,7 +38,7 @@ const toggleColumns = (index) => {
     activeTableIndex.value = activeTableIndex.value === index ? -1 : index;
 }
 
-const setDbName = (event) => {
+const setDbName = () => {
     if (activeDbIndex.value === -1) {
         emit('getDbName', '')
         return
