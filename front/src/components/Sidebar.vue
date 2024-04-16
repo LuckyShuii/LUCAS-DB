@@ -16,7 +16,7 @@ const emit = defineEmits(['getDbName'])
     width: 350px;
     background-color: var(--secondary-color);
     height: calc(100vh - 35px);
-    overflow-y: scroll;
+    overflow: scroll;
 }
 
 h2 {

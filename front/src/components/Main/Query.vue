@@ -36,6 +36,9 @@ const fillTextarea = (query) => {
         case 'DELETE':
             textarea.value = 'DELETE FROM table_name WHERE condition;'
             break;
+        case 'ALTER':
+            textarea.value = 'ALTER TABLE table_name ADD column_name datatype;'
+            break;
         default:
             break;
     }
@@ -98,11 +101,13 @@ const runQuery = async () => {
             <button class="marged" @click="fillTextarea('DELETE')">
                 DELETE
             </button>
+            <button class="marged" @click="fillTextarea('ALTER')">
+                ALTER
+            </button>
         </section>
         <form action="" method="post" @submit.prevent="runQuery">
-            <textarea v-model="textarea" name="query" id="query" cols="30" rows="10"
-                @keydown.enter="runQuery"></textarea>
-            <div id="loader" v-if="loading">
+            <textarea v-model="textarea" name="query" id="query" cols="30" rows="10"></textarea>
+            <div id=" loader" v-if="loading">
                 <pulse-loader :loading="loading" :color="color" :size="size"></pulse-loader>
             </div>
             <div class="buttons">
@@ -155,6 +160,8 @@ const runQuery = async () => {
 .success {
     background-color: var(--main-color);
     color: white;
+    max-height: calc(100vh - 540px);
+    overflow-y: scroll;
 }
 
 .fail {
