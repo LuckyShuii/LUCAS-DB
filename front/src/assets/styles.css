@@ -113,3 +113,21 @@ a:active {
 .loader {
   margin-top: 1rem;
 }
+
+.structure-btn {
+  padding: 0.5rem;
+}
+
+.structure-btn:hover {
+  background-color: var(--main-color);
+  color: white;
+}
+
+.structure-btn:active {
+  background-color: #1f3e2e;
+}
+
+.action-btn {
+  display: flex;
+  gap: 0.5rem;
+}
