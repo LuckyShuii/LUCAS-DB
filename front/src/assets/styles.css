@@ -30,6 +30,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+  outline: none;
 }
 
 button:hover {
@@ -130,4 +131,65 @@ a:active {
 .action-btn {
   display: flex;
   gap: 0.5rem;
+}
+
+.p-dialog {
+  width: 30rem;
+  height: 15rem;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--secondary-color);
+  border: 3px solid var(--main-color);
+}
+
+[data-pc-section="mask"] {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.p-dialog-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.p-dialog-content p {
+  text-align: center;
+  width: 100%;
+}
+
+.p-dialog-content .buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  width: 100%;
+}
+
+.p-dialog-content .buttons button {
+  width: 5rem;
+  height: 2rem;
+
+}
+
+.p-dialog-content .buttons .cancel {
+  background-color: rgb(170, 14, 14);
+  color: white;
+}
+
+.p-dialog-content .buttons .cancel:hover {
+  background-color: rgb(140, 14, 14);
+}
+
+.p-dialog-content p {
+  margin-top: 1rem;
+}
+
+.p-dialog-title {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--main-color);
+  border-bottom: 3px solid var(--main-color);
 }

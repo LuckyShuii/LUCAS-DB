@@ -71,4 +71,20 @@ class DatabaseController extends AbstractController
             'tables' => $tables,
         ]);
     }
+
+    #[Route('/database/{database}/table/{table}/drop', name: 'app_database_table_drop', methods: ['DELETE'])]
+    public function dropTable(Connection $connection, string $database, string $table): JsonResponse
+    {
+        try {
+            $connection->executeStatement('DROP TABLE `' . $database . '`.`' . $table . '`');
+        } catch (\Exception $e) {
+            return $this->json([
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return $this->json([
+            'message' => 'Table ' . $table . ' has been dropped.',
+        ]);
+    }
 }

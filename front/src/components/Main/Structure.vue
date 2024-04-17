@@ -73,6 +73,7 @@ watch(() => props.dbName, async () => {
 
 <template>
     <section class="tab-structure" id="structure">
+        {{ dbName }}
         <h2 class="main-title">
             <img src="../../assets/icons/db.svg" alt="Add" />
             Base de données concernée :<span class="db-name"><a href="#">{{ dbName }}</a></span>
@@ -80,7 +81,8 @@ watch(() => props.dbName, async () => {
         <div class="loader" v-if="loading">
             <pulse-loader :loading="loading" :color="color" :size="size"></pulse-loader>
         </div>
-        <Database :structure="structure" v-if="view === 'database' && !loading" />
+        <Database :structure="structure" :dbName="dbName" v-if="view === 'database' && !loading"
+            @update-structure="getDatabaseStructure" />
     </section>
 </template>
 
