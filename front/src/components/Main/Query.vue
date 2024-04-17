@@ -83,10 +83,10 @@ const runQuery = async () => {
 </script>
 
 <template>
-    <section class="query-section" v-if="dbName">
-        <h2 id="main-title">
+    <section class="tab-structure" v-if="dbName">
+        <h2 class="main-title">
             <img src="../../assets/icons/db.svg" alt="Add" />
-            Base de données concernée :<span id="db-name"><a href="#">{{ dbName }}</a></span>
+            Base de données concernée :<span class="db-name"><a href="#">{{ dbName }}</a></span>
         </h2>
         <section id="help-buttons">
             <button @click="fillTextarea('SELECT')">
@@ -107,7 +107,7 @@ const runQuery = async () => {
         </section>
         <form action="" method="post" @submit.prevent="runQuery">
             <textarea v-model="textarea" name="query" id="query" cols="30" rows="10"></textarea>
-            <div id=" loader" v-if="loading">
+            <div id="loader" v-if="loading">
                 <pulse-loader :loading="loading" :color="color" :size="size"></pulse-loader>
             </div>
             <div class="buttons">
@@ -167,7 +167,7 @@ td {
 .table {
     margin-top: 1rem;
     overflow-x: scroll;
-    max-height: calc(100vh - 540px);
+    max-height: calc(100vh - 440px);
 }
 
 th {
@@ -190,10 +190,6 @@ td {
 
 .marged {
     margin-left: 0.5rem;
-}
-
-#loader {
-    margin-top: 1rem;
 }
 
 .info-p {
@@ -242,32 +238,6 @@ td {
     color: white;
 }
 
-#db-name a {
-    color: var(--main-color);
-    font-weight: 500;
-    margin-left: 5px;
-}
-
-#db-name a:hover {
-    border-bottom: 1px solid var(--main-color);
-}
-
-#db-name a:active {
-    border-bottom: 1px solid #000;
-    color: #000;
-}
-
-#main-title {
-    display: flex;
-    align-items: center;
-    margin-top: 8px;
-}
-
-#main-title img {
-    width: 20px;
-    margin-right: 0.5rem;
-}
-
 #query {
     width: 100%;
     margin-top: 1rem;
@@ -277,14 +247,5 @@ td {
     resize: none;
     outline: none;
     height: 100px;
-}
-
-.query-section {
-    max-width: 100%;
-    margin-top: 1rem;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    resize: none;
 }
 </style>

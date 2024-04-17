@@ -9,7 +9,8 @@ import { ref } from 'vue'
 
 const props = defineProps(['dbName'])
 
-const activeTab = ref('query')
+const activeTab = ref('structure')
+const view = ref('database')
 
 const changeTab = (event) => {
     activeTab.value = event
@@ -25,7 +26,7 @@ const changeTab = (event) => {
                 Aucune base de données sélectionnée
             </h2>
         </section>
-        <Structure v-if="activeTab === 'structure' && dbName" />
+        <Structure v-if="activeTab === 'structure' && dbName" :view="view" :dbName="dbName" />
         <Query v-if="activeTab === 'query' && dbName" :dbName="dbName" :activeTab="activeTab" />
         <Importer v-if="activeTab === 'importer' && dbName" />
         <Parametres v-if="activeTab === 'parametres' && dbName" />
@@ -59,10 +60,5 @@ main {
     display: flex;
     align-items: center;
     margin-top: 8px;
-}
-
-#main-title img {
-    width: 20px;
-    margin-right: 0.5rem;
 }
 </style>

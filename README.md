@@ -18,6 +18,8 @@ At the moment, this project only runs on MySQL. Using other databases may work b
 
 change `.env` file, line `DATABASE_URL=` with the proper data of your database (in order to get the login info to run queries)
 
+`symfony console d:d:c`
+
 `symfony server:start`
 
 ## Start Front

@@ -17,6 +17,7 @@ class DatabaseController extends AbstractController
 
         foreach ($databases as $key => &$database) {
             $tables = $connection->fetchAllAssociative('SHOW TABLES FROM `' . $database['Database'] . '`');
+
             foreach ($tables as $table) {
                 $tableName = current($table);
                 try {
@@ -36,6 +37,38 @@ class DatabaseController extends AbstractController
 
         return $this->json([
             'db_list' => $databases,
+        ]);
+    }
+
+    #[Route('/database/{database}', name: 'app_database_show', methods: ['GET'])]
+    public function show(Connection $connection, string $database): JsonResponse
+    {
+        try {
+            $tables = $connection->fetchAllAssociative('SHOW TABLES FROM `' . $database . '`');
+
+            foreach ($tables as $key => &$table) {
+                $tableName = current($table);
+
+                $rowCount = $connection->fetchOne('SELECT COUNT(*) FROM `' . $database . '`.`' . $tableName . '`');
+                $table['rowCount'] = $rowCount;
+
+                $tableType = $connection->fetchOne('SELECT TABLE_TYPE FROM information_schema.TABLES WHERE TABLE_SCHEMA = "' . $database . '" AND TABLE_NAME = "' . $tableName . '"');
+                $table['tableType'] = $tableType;
+
+                $tableCollation = $connection->fetchOne('SELECT TABLE_COLLATION FROM information_schema.TABLES WHERE TABLE_SCHEMA = "' . $database . '" AND TABLE_NAME = "' . $tableName . '"');
+                $table['tableCollation'] = $tableCollation;
+
+                $tableSize = $connection->fetchOne('SELECT ROUND((DATA_LENGTH + INDEX_LENGTH) / 1024 / 1024, 2) AS "Size (MB)" FROM information_schema.TABLES WHERE TABLE_SCHEMA = "' . $database . '" AND TABLE_NAME = "' . $tableName . '"');
+                $table['tableSize'] = $tableSize;
+            }
+        } catch (\Exception $e) {
+            return $this->json([
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return $this->json([
+            'tables' => $tables,
         ]);
     }
 }
