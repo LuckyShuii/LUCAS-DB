@@ -11,6 +11,7 @@ const visible = ref(false)
 const dialogAction = ref('')
 const tableToDrop = ref('')
 const tableToEmpty = ref('')
+const responseAPI = ref('')
 
 const displayModal = (type, index) => {
     const tableKey = Object.keys(props.structure.tables[index])[0]
@@ -34,8 +35,8 @@ const displayModal = (type, index) => {
 
 const dropTable = async (tableName) => {
     try {
-        await axios.delete(`http://localhost:8000/api/database/${props.dbName}/table/${tableName}/drop`)
-        emit('updateStructure')
+        const response = await axios.delete(`http://localhost:8000/api/database/${props.dbName}/table/${tableName}/drop`)
+        responseAPI.value = response.data
     } catch (error) {
         throw new Error(error)
     }
@@ -52,6 +53,23 @@ const makeActionOnTable = async () => {
             await emptyTable(tableToEmpty.value)
             state = 'vidée'
         }
+
+        if (responseAPI.value.error) {
+            Swal.fire({
+                title: 'Erreur !',
+                text: responseAPI.value.error,
+                icon: 'error',
+                timer: 20000,
+                position: 'top-right',
+                toast: true,
+                showConfirmButton: false,
+                showCloseButton: true
+            })
+            hideDialog()
+            return;
+        }
+
+        emit('updateStructure')
 
         Swal.fire({
             title: 'Succès !',
@@ -83,6 +101,7 @@ const hideDialog = () => {
     visible.value = false
     tableToDrop.value = ''
     tableToEmpty.value = ''
+    responseAPI.value = ''
 }
 </script>
 

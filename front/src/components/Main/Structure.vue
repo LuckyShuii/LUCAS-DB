@@ -73,7 +73,6 @@ watch(() => props.dbName, async () => {
 
 <template>
     <section class="tab-structure" id="structure">
-        {{ dbName }}
         <h2 class="main-title">
             <img src="../../assets/icons/db.svg" alt="Add" />
             Base de données concernée :<span class="db-name"><a href="#">{{ dbName }}</a></span>
