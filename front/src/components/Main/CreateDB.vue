@@ -1,87 +1,96 @@
 <script setup>
 import Dropdown from 'primevue/dropdown';
 import { ref } from 'vue';
+import collations from '@/data/collations.js';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
-const collations = ref([
-    { name: 'utf8_general_ci' },
-    { name: 'utf8_unicode_ci' },
-    { name: 'utf8_bin' },
-    { name: 'utf8mb4_general_ci' },
-    { name: 'utf8mb4_unicode_ci' },
-    { name: 'utf8mb4_bin' },
-    { name: 'latin1_swedish_ci' },
-    { name: 'latin1_danish_ci' },
-    { name: 'latin1_german1_ci' },
-    { name: 'latin1_general_ci' },
-    { name: 'latin1_general_cs' },
-    { name: 'latin1_bin' },
-    { name: 'cp1251_bulgarian_ci' },
-    { name: 'cp1251_ukrainian_ci' },
-    { name: 'cp1251_bin' },
-    { name: 'cp1251_general_ci' },
-    { name: 'cp1251_general_cs' },
-    { name: 'utf16_general_ci' },
-    { name: 'utf16_unicode_ci' },
-    { name: 'utf16_bin' },
-    { name: 'utf16le_general_ci' },
-    { name: 'utf16le_bin' },
-    { name: 'cp1256_general_ci' },
-    { name: 'cp1256_bin' },
-    { name: 'cp1257_lithuanian_ci' },
-    { name: 'cp1257_bin' },
-    { name: 'cp1257_general_ci' },
-    { name: 'utf32_general_ci' },
-    { name: 'utf32_unicode_ci' },
-    { name: 'utf32_bin' },
-    { name: 'binary' },
-    { name: 'geostd8_general_ci' },
-    { name: 'geostd8_unicode_ci' },
-    { name: 'geostd8_bin' },
-    { name: 'armscii8_general_ci' },
-    { name: 'armscii8_bin' },
-    { name: 'ascii_general_ci' },
-    { name: 'ascii_bin' },
-    { name: 'cp1250_general_ci' },
-    { name: 'cp1250_czech_cs' },
-    { name: 'cp1250_croatian_ci' },
-    { name: 'cp1250_bin' },
-    { name: 'cp1250_polish_ci' },
-    { name: 'cp1250_general_cs' },
-    { name: 'utf8mb4_0900_ai_ci' },
-    { name: 'utf8mb4_0900_as_cs' },
-    { name: 'utf8mb4_0900_as_ci' },
-    { name: 'utf8mb4_0900_bin' },
-    { name: 'utf8mb4_0900_bin' },
-    { name: 'utf8mb4_bin' },
-    { name: 'utf8mb4_unicode_520_ci' },
-    { name: 'utf8mb4_unicode_520_ci' },
-    { name: 'utf8mb4_vietnamese_ci' },
-    { name: 'utf8mb4_vietnamese_ci' },
-]);
 const selectedCollation = ref(null);
+const APIresponse = ref(null);
+
+const createDB = () => {
+    let dbName = document.getElementById('name').value;
+
+    if (dbName === '' || selectedCollation.value.name === null) {
+        Swal.fire({
+            title: 'Erreur !',
+            text: 'Veuillez remplir tous les champs.',
+            icon: 'error',
+            timer: 10000,
+            position: 'top-right',
+            toast: true,
+            showConfirmButton: false,
+            showCloseButton: true
+        })
+        return;
+    }
+
+    let collation = selectedCollation.value.name;
+
+    try {
+        const reponse = axios.post('http://localhost:8000/api/database/create', {
+            dbName: dbName,
+            collation: collation
+        })
+        Swal.fire({
+            title: 'Succès !',
+            text: 'Votre base de données a été créée avec succès.',
+            icon: 'success',
+            timer: 10000,
+            position: 'top-right',
+            toast: true,
+            showConfirmButton: false,
+            showCloseButton: true
+        })
+        document.getElementById('name').value = '';
+        selectedCollation.value = null;
+    } catch (error) {
+        Swal.fire({
+            title: 'Erreur !',
+            text: 'Votre base de données n\'a pas pu être créée.' + error,
+            icon: 'error',
+            timer: 10000,
+            position: 'top-right',
+            toast: true,
+            showConfirmButton: false,
+            showCloseButton: true
+        })
+    }
+}
 </script>
 
 <template>
-    <h2>Création de base de données</h2>
-    <form>
-        <div class="form">
-            <div class="form-block">
-                <label for="name">Nom de la base de données</label>
-                <input type="text" id="name" name="name" required>
+    <section id="create-db">
+        <h2>Création de base de données</h2>
+        <form>
+            <div class="form">
+                <div class="form-block">
+                    <label for="name">Nom de la base de données</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-block">
+                    <label for="collation">Collation</label>
+                    <Dropdown v-model="selectedCollation" :options="collations" optionLabel="name"
+                        placeholder="Sélectionner une collation" />
+                </div>
             </div>
-            <div class="form-block">
-                <label for="collation">Collation</label>
-                <Dropdown v-model="selectedCollation" :options="collations" optionLabel="name"
-                    placeholder="Sélectionner une collation" />
-            </div>
-        </div>
-        <button type="submit">Créer</button>
-    </form>
+            <button type="submit" @click.prevent="createDB" class="btn btn-primary">Créer</button>
+        </form>
+    </section>
 </template>
 
 <style scoped>
+#create-db {
+    margin: 0.5rem 0 2rem 0;
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    width: 100%;
+}
+
 h2 {
-    margin: 1rem 0;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
 }
 
 .form-block {
@@ -100,9 +109,18 @@ input {
     border: 1px solid #ccc;
     border-radius: 0.25rem;
     margin-right: 0.5rem;
+    outline: none;
 }
 
 .form {
     display: flex;
+    flex-wrap: wrap;
+    gap: 1rem
+}
+
+button {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
 }
 </style>

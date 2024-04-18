@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 #[Route('/api')]
 class DatabaseController extends AbstractController
@@ -37,6 +38,28 @@ class DatabaseController extends AbstractController
 
         return $this->json([
             'db_list' => $databases,
+        ]);
+    }
+
+    #[Route('/database/create', name: 'app_database_create', methods: ['POST'])]
+    public function createDatabase(Connection $connection, Request $request): JsonResponse
+    {
+        $content = $request->getContent();
+        $data = json_decode($content, true);
+
+        $database = $data['dbName'];
+        $collation = $data['collation'];
+
+        try {
+            $connection->executeStatement('CREATE DATABASE `' . $database . '` COLLATE ' . $collation);
+        } catch (\Exception $e) {
+            return $this->json([
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return $this->json([
+            'message' => 'Database ' . $database . ' has been created.',
         ]);
     }
 
