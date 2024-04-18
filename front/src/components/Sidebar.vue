@@ -2,7 +2,7 @@
 import Databases from '../components/Sidebar/Databases.vue'
 import { defineEmits, ref } from 'vue'
 
-const propre = defineProps(['openDb'])
+const props = defineProps(['openDb', 'newDbCreated'])
 const emit = defineEmits(['getDbName', 'setCreateDB'])
 </script>
 
@@ -15,7 +15,7 @@ const emit = defineEmits(['getDbName', 'setCreateDB'])
             </button>
         </div>
         <h2>Mes bases de données</h2>
-        <Databases id="db" @getDbName="emit('getDbName', $event)" :openDb="openDb" />
+        <Databases id="db" @getDbName="emit('getDbName', $event)" :openDb="openDb" :newDbCreated="newDbCreated" />
     </section>
 </template>
 

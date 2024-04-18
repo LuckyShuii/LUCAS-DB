@@ -4,7 +4,7 @@ import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
-const props = defineProps(['openDb'])
+const props = defineProps(['openDb', 'newDbCreated'])
 const emit = defineEmits(['getDbName'])
 
 const loading = ref(true)
@@ -50,6 +50,15 @@ const setDbName = () => {
 onMounted(async () => {
     await getDatabaseList()
     loading.value = false
+})
+
+watch(() => props.newDbCreated, async () => {
+    console.log('newDbCreated', props.newDbCreated)
+    loading.value = true
+    await getDatabaseList()
+    loading.value = false
+    activeDbIndex.value = -1
+    activeTableIndex.value = -1
 })
 
 watch(() => props.openDb, async () => {

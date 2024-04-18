@@ -5,18 +5,39 @@ import collations from '@/data/collations.js';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-const selectedCollation = ref(null);
-const APIresponse = ref(null);
+const emit = defineEmits(['setNewDbCreated'])
 
-const createDB = () => {
+const selectedCollation = ref(null);
+const alreadyExists = ref(false);
+
+const checkIfDbExists = async (dbName) => {
+    try {
+        const response = await axios.get('http://localhost:8000/api/database/check/' + dbName);
+        console.log(response.data.exists)
+        alreadyExists.value = response.data.exists;
+    } catch (error) {
+        Swal.fire({
+            title: 'Erreur !',
+            text: 'Votre base de données n\'a pas pu être créée.' + error,
+            icon: 'error',
+            timer: 10000,
+            position: 'top-right',
+            toast: true,
+            showConfirmButton: false,
+            showCloseButton: true
+        })
+    }
+}
+
+const createDB = async () => {
     let dbName = document.getElementById('name').value;
 
-    if (dbName === '' || selectedCollation.value.name === null) {
+    if (dbName === '' || selectedCollation.value === null) {
         Swal.fire({
             title: 'Erreur !',
             text: 'Veuillez remplir tous les champs.',
             icon: 'error',
-            timer: 10000,
+            timer: 5000,
             position: 'top-right',
             toast: true,
             showConfirmButton: false,
@@ -27,8 +48,24 @@ const createDB = () => {
 
     let collation = selectedCollation.value.name;
 
+    await checkIfDbExists(dbName);
+
+    if (alreadyExists.value) {
+        Swal.fire({
+            title: 'Erreur !',
+            text: 'Votre cette base de données existe déjà.',
+            icon: 'error',
+            timer: 5000,
+            position: 'top-right',
+            toast: true,
+            showConfirmButton: false,
+            showCloseButton: true
+        })
+        return;
+    }
+
     try {
-        const reponse = axios.post('http://localhost:8000/api/database/create', {
+        const reponse = await axios.post('http://localhost:8000/api/database/create', {
             dbName: dbName,
             collation: collation
         })
@@ -44,6 +81,8 @@ const createDB = () => {
         })
         document.getElementById('name').value = '';
         selectedCollation.value = null;
+
+        emit('setNewDbCreated')
     } catch (error) {
         Swal.fire({
             title: 'Erreur !',

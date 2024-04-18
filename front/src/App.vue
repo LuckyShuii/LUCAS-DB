@@ -9,6 +9,7 @@ const currentUser = ref('root')
 const dbName = ref()
 const createDB = ref(false)
 const openDb = ref(-1)
+const newDbCreated = ref(-1)
 
 const setCreateDB = () => {
   createDB.value = true
@@ -23,6 +24,10 @@ const setDbName = (name) => {
   dbName.value = name
 }
 
+const setNewDbCreated = () => {
+  newDbCreated.value++
+}
+
 watch(() => dbName.value, () => {
   createDB.value = false
 })
@@ -31,8 +36,9 @@ watch(() => dbName.value, () => {
 <template>
   <Header :currentUser="currentUser" />
   <div class="app">
-    <Sidebar id="sidebar" @getDbName="setDbName" @setCreateDB="setCreateDB" :openDb="openDb" />
-    <Main :dbName="dbName" :createDB="createDB" @setCreateDB="setCreateDBnoTab" />
+    <Sidebar id="sidebar" @getDbName="setDbName" @setCreateDB="setCreateDB" :openDb="openDb"
+      :newDbCreated="newDbCreated" />
+    <Main :dbName="dbName" :createDB="createDB" @setCreateDB="setCreateDBnoTab" @setNewDbCreated="setNewDbCreated" />
   </div>
 </template>
 

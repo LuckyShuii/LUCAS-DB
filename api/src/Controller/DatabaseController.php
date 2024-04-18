@@ -41,6 +41,28 @@ class DatabaseController extends AbstractController
         ]);
     }
 
+    #[Route('/database/check/{database}', name: 'app_database_check', methods: ['GET'])]
+    public function checkDatabase(Connection $connection, string $database): JsonResponse
+    {
+        try {
+            $connection->executeStatement('USE `' . $database . '`');
+            if ($connection->isConnected()) {
+                $exists = true;
+                $connection->close();
+            } else {
+                $exists = false;
+            }
+        } catch (\Exception $e) {
+            return $this->json([
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return $this->json([
+            'exists' => $exists,
+        ]);
+    }
+
     #[Route('/database/create', name: 'app_database_create', methods: ['POST'])]
     public function createDatabase(Connection $connection, Request $request): JsonResponse
     {
@@ -124,6 +146,22 @@ class DatabaseController extends AbstractController
 
         return $this->json([
             'message' => 'Table ' . $table . ' has been emptied.',
+        ]);
+    }
+
+    #[Route('/database/drop/{database}', name: 'app_database_drop', methods: ['DELETE'])]
+    public function dropDatabase(Connection $connection, string $database): JsonResponse
+    {
+        try {
+            $connection->executeStatement('DROP DATABASE `' . $database . '`');
+        } catch (\Exception $e) {
+            return $this->json([
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return $this->json([
+            'message' => 'Database ' . $database . ' has been dropped.',
         ]);
     }
 }

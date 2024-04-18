@@ -9,7 +9,7 @@ import CreateDB from '../components/Main/CreateDB.vue'
 import { ref } from 'vue'
 
 const props = defineProps(['dbName', 'createDB'])
-const emit = defineEmits(['setCreateDB'])
+const emit = defineEmits(['setCreateDB', 'setNewDbCreated'])
 
 const activeTab = ref('structure')
 const view = ref('database')
@@ -23,7 +23,7 @@ const changeTab = (event) => {
 
 <template>
     <main>
-        <CreateDB v-if="createDB" />
+        <CreateDB v-if="createDB" @setNewDbCreated="emit('setNewDbCreated')" />
         <div v-if="!createDB">
             <Buttons @active-tab="changeTab" :activeTab="activeTab" />
             <section class="db-check" v-if="!dbName">
@@ -32,10 +32,12 @@ const changeTab = (event) => {
                     Aucune base de données sélectionnée
                 </h2>
             </section>
-            <Structure v-if="activeTab === 'structure' && dbName" :view="view" :dbName="dbName" />
+            <Structure v-if="activeTab === 'structure' && dbName" :view="view" :dbName="dbName"
+                @updateActiveTab="activeTab = 'structure'" />
             <Query v-if="activeTab === 'query' && dbName" :dbName="dbName" @updateActiveTab="activeTab = 'structure'" />
             <Importer v-if="activeTab === 'importer' && dbName" />
-            <Parametres v-if="activeTab === 'parametres' && dbName" />
+            <Parametres v-if="activeTab === 'parametres' && dbName" :dbName="dbName"
+                @updateActiveTab="activeTab = 'structure'" />
             <Utilisateurs v-if="activeTab === 'utilisateurs' && dbName" />
         </div>
     </main>
