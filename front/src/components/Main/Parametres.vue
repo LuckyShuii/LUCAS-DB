@@ -1,11 +1,16 @@
 <script setup>
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
+import { ref } from 'vue';
 
 const emit = defineEmits(['updateActiveTab', 'setNewDbCreated']);
 const props = defineProps(['dbName']);
 
+const loading = ref(false);
+
 const dropDb = async () => {
+    loading.value = true;
     try {
         await axios.delete('http://localhost:8000/api/database/drop/' + props.dbName);
         emit('updateActiveTab');
@@ -20,6 +25,7 @@ const dropDb = async () => {
             showConfirmButton: false,
             showCloseButton: true
         })
+        loading.value = false;
     } catch (error) {
         Swal.fire({
             title: 'Erreur !',
@@ -31,6 +37,7 @@ const dropDb = async () => {
             showConfirmButton: false,
             showCloseButton: true
         })
+        loading.value = false;
     }
 }
 </script>
@@ -42,10 +49,13 @@ const dropDb = async () => {
             Base de données concernée : <span class="db-name" @click="emit('updateActiveTab')">{{ dbName
                 }}</span>
         </h2>
-        <button id="drop-db" @click="dropDb">
+        <button id="drop-db" @click="dropDb" :disabled="loading">
             <img src="../../assets/icons/drop.svg" alt="Poubelle" id="db-drop" />
             <span>Drop Database</span>
         </button>
+        <div id="loader" v-if="loading">
+            <pulse-loader :loading="loading" :color="color" :size="size"></pulse-loader>
+        </div>
     </section>
 </template>
 

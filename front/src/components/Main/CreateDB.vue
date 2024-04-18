@@ -121,7 +121,8 @@ const createDB = async () => {
                 </div>
             </div>
             <div class="form">
-                <button type="submit" @click.prevent="createDB" class="btn btn-primary">Créer</button>
+                <button type="submit" @click.prevent="createDB" class="btn btn-primary"
+                    :disabled="loading">Créer</button>
                 <div id="loader" v-if="loading">
                     <pulse-loader :loading="loading" :color="color" :size="size"></pulse-loader>
                 </div>
