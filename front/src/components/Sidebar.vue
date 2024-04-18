@@ -6,6 +6,12 @@ const emit = defineEmits(['getDbName'])
 
 <template>
     <section id="sidebar">
+        <div class="div-add">
+            <button class="add-db">
+                <img src="../assets/icons/add.svg" alt="Add" />
+                Créer une base de données
+            </button>
+        </div>
         <h2>Mes bases de données</h2>
         <Databases id="db" @getDbName="emit('getDbName', $event)" />
     </section>
@@ -20,13 +26,31 @@ const emit = defineEmits(['getDbName'])
 }
 
 h2 {
-    text-align: center;
-    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-weight: 400;
+    height: 3rem;
+    border-top: 1px solid black;
     border-bottom: 1px solid black;
 }
 
 #db {
     margin: 1rem 14px;
+}
+
+.add-db {
+    width: 90%;
+    margin: 0 0 1rem 0;
+    height: 3rem;
+    border-radius: 10rem;
+    font-size: 1rem;
+}
+
+.div-add {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
 }
 </style>
