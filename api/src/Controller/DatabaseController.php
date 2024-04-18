@@ -152,6 +152,12 @@ class DatabaseController extends AbstractController
     #[Route('/database/drop/{database}', name: 'app_database_drop', methods: ['DELETE'])]
     public function dropDatabase(Connection $connection, string $database): JsonResponse
     {
+        if ($database === 'information_schema' || $database === 'mysql' || $database === 'performance_schema' || $database === 'sys' || $database === 'phpmyadmin' || $database === 'lucasgbd') {
+            return $this->json([
+                'error' => 'You cannot drop system databases.',
+            ]);
+        }
+
         try {
             $connection->executeStatement('DROP DATABASE `' . $database . '`');
         } catch (\Exception $e) {

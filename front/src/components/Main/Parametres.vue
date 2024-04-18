@@ -12,9 +12,26 @@ const loading = ref(false);
 const dropDb = async () => {
     loading.value = true;
     try {
-        await axios.delete('http://localhost:8000/api/database/drop/' + props.dbName);
+        const response = await axios.delete('http://localhost:8000/api/database/drop/' + props.dbName);
+
+        if (response.data.error) {
+            Swal.fire({
+                title: 'Erreur !',
+                text: response.data.error,
+                icon: 'error',
+                timer: 10000,
+                position: 'top-right',
+                toast: true,
+                showConfirmButton: false,
+                showCloseButton: true
+            })
+            loading.value = false;
+            return;
+        }
+
         emit('updateActiveTab');
         emit('setNewDbCreated');
+
         Swal.fire({
             title: 'Succès !',
             text: 'Votre base de données a bien été supprimée.',
