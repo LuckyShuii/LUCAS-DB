@@ -42,6 +42,15 @@ const dropTable = async (tableName) => {
     }
 }
 
+const emptyTable = async (tableName) => {
+    try {
+        const response = await axios.delete(`http://localhost:8000/api/database/${props.dbName}/table/${tableName}/empty`)
+        responseAPI.value = response.data
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
 const makeActionOnTable = async () => {
     let state = '';
 
@@ -158,7 +167,11 @@ const hideDialog = () => {
         </table>
     </div>
     <Dialog modal :closable="false" v-model:visible="visible" :header="dialogAction">
-        <p>Etes-vous certain de vouloir continuer ?</p>
+        <p>
+            Etes-vous certain de vouloir continuer ?
+            <br>
+            Cette action est irréversible.
+        </p>
         <div class="buttons">
             <Button class="cancel" type="button" @click="hideDialog">Annuler</Button>
             <Button type="button" @click="makeActionOnTable">Oui</Button>

@@ -87,4 +87,20 @@ class DatabaseController extends AbstractController
             'message' => 'Table ' . $table . ' has been dropped.',
         ]);
     }
+
+    #[Route('/database/{database}/table/{table}/empty', name: 'app_database_table_empty', methods: ['DELETE'])]
+    public function emptyTable(Connection $connection, string $database, string $table): JsonResponse
+    {
+        try {
+            $connection->executeStatement('TRUNCATE TABLE `' . $database . '`.`' . $table . '`');
+        } catch (\Exception $e) {
+            return $this->json([
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return $this->json([
+            'message' => 'Table ' . $table . ' has been emptied.',
+        ]);
+    }
 }
