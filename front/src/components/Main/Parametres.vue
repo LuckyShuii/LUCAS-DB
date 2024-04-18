@@ -2,13 +2,14 @@
 import Swal from 'sweetalert2';
 import axios from 'axios';
 
-const emit = defineEmits(['updateActiveTab']);
+const emit = defineEmits(['updateActiveTab', 'setNewDbCreated']);
 const props = defineProps(['dbName']);
 
 const dropDb = async () => {
     try {
         await axios.delete('http://localhost:8000/api/database/drop/' + props.dbName);
         emit('updateActiveTab');
+        emit('setNewDbCreated');
         Swal.fire({
             title: 'Succès !',
             text: 'Votre base de données a bien été supprimée.',

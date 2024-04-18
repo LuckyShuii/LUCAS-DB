@@ -37,7 +37,7 @@ const changeTab = (event) => {
             <Query v-if="activeTab === 'query' && dbName" :dbName="dbName" @updateActiveTab="activeTab = 'structure'" />
             <Importer v-if="activeTab === 'importer' && dbName" />
             <Parametres v-if="activeTab === 'parametres' && dbName" :dbName="dbName"
-                @updateActiveTab="activeTab = 'structure'" />
+                @updateActiveTab="activeTab = 'structure'" @setNewDbCreated="emit('setNewDbCreated', 'drop')" />
             <Utilisateurs v-if="activeTab === 'utilisateurs' && dbName" />
         </div>
     </main>

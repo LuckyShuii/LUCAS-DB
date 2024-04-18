@@ -24,8 +24,11 @@ const setDbName = (name) => {
   dbName.value = name
 }
 
-const setNewDbCreated = () => {
+const setNewDbCreated = (from = null) => {
   newDbCreated.value++
+  if (from === 'drop') {
+    dbName.value = ''
+  }
 }
 
 watch(() => dbName.value, () => {

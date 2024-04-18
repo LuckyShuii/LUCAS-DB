@@ -4,10 +4,12 @@ import { ref } from 'vue';
 import collations from '@/data/collations.js';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 
 const emit = defineEmits(['setNewDbCreated'])
 
 const selectedCollation = ref(null);
+const loading = ref(false);
 const alreadyExists = ref(false);
 
 const checkIfDbExists = async (dbName) => {
@@ -30,6 +32,7 @@ const checkIfDbExists = async (dbName) => {
 }
 
 const createDB = async () => {
+    loading.value = true;
     let dbName = document.getElementById('name').value;
 
     if (dbName === '' || selectedCollation.value === null) {
@@ -43,6 +46,7 @@ const createDB = async () => {
             showConfirmButton: false,
             showCloseButton: true
         })
+        loading.value = false;
         return;
     }
 
@@ -61,6 +65,7 @@ const createDB = async () => {
             showConfirmButton: false,
             showCloseButton: true
         })
+        loading.value = false;
         return;
     }
 
@@ -83,6 +88,7 @@ const createDB = async () => {
         selectedCollation.value = null;
 
         emit('setNewDbCreated')
+        loading.value = false;
     } catch (error) {
         Swal.fire({
             title: 'Erreur !',
@@ -94,6 +100,7 @@ const createDB = async () => {
             showConfirmButton: false,
             showCloseButton: true
         })
+        loading.value = false;
     }
 }
 </script>
@@ -113,12 +120,21 @@ const createDB = async () => {
                         placeholder="Sélectionner une collation" />
                 </div>
             </div>
-            <button type="submit" @click.prevent="createDB" class="btn btn-primary">Créer</button>
+            <div class="form">
+                <button type="submit" @click.prevent="createDB" class="btn btn-primary">Créer</button>
+                <div id="loader" v-if="loading">
+                    <pulse-loader :loading="loading" :color="color" :size="size"></pulse-loader>
+                </div>
+            </div>
         </form>
     </section>
 </template>
 
 <style scoped>
+#loader {
+    margin-top: 0.5rem;
+}
+
 #create-db {
     margin: 0.5rem 0 2rem 0;
     border: 1px solid #ccc;
