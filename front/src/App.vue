@@ -3,21 +3,36 @@ import Header from './components/Header.vue'
 import Sidebar from './components/Sidebar.vue'
 import Main from './components/Main.vue'
 
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 const currentUser = ref('root')
 const dbName = ref()
+const createDB = ref(false)
+const openDb = ref(-1)
+
+const setCreateDB = () => {
+  createDB.value = true
+  openDb.value++
+}
+
+const setCreateDBnoTab = () => {
+  createDB.value = false;
+}
 
 const setDbName = (name) => {
   dbName.value = name
 }
+
+watch(() => dbName.value, () => {
+  createDB.value = false
+})
 </script>
 
 <template>
   <Header :currentUser="currentUser" />
   <div class="app">
-    <Sidebar id="sidebar" @getDbName="setDbName" />
-    <Main :dbName="dbName" />
+    <Sidebar id="sidebar" @getDbName="setDbName" @setCreateDB="setCreateDB" :openDb="openDb" />
+    <Main :dbName="dbName" :createDB="createDB" @setCreateDB="setCreateDBnoTab" />
   </div>
 </template>
 

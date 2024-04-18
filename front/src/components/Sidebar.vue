@@ -1,19 +1,21 @@
 <script setup>
 import Databases from '../components/Sidebar/Databases.vue'
+import { defineEmits, ref } from 'vue'
 
-const emit = defineEmits(['getDbName'])
+const propre = defineProps(['openDb'])
+const emit = defineEmits(['getDbName', 'setCreateDB'])
 </script>
 
 <template>
     <section id="sidebar">
         <div class="div-add">
-            <button class="add-db">
+            <button class="add-db" @click="emit('setCreateDB')">
                 <img src="../assets/icons/add.svg" alt="Add" />
                 Créer une base de données
             </button>
         </div>
         <h2>Mes bases de données</h2>
-        <Databases id="db" @getDbName="emit('getDbName', $event)" />
+        <Databases id="db" @getDbName="emit('getDbName', $event)" :openDb="openDb" />
     </section>
 </template>
 

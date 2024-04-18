@@ -1,9 +1,10 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
+const props = defineProps(['openDb'])
 const emit = defineEmits(['getDbName'])
 
 const loading = ref(true)
@@ -49,6 +50,11 @@ const setDbName = () => {
 onMounted(async () => {
     await getDatabaseList()
     loading.value = false
+})
+
+watch(() => props.openDb, async () => {
+    activeDbIndex.value = -1
+    activeTableIndex.value = -1
 })
 </script>
 
