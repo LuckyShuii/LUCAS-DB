@@ -75,7 +75,7 @@ watch(() => props.dbName, async () => {
     <section class="tab-structure" id="structure">
         <h2 class="main-title">
             <img src="../../assets/icons/db.svg" alt="Add" />
-            Base de données concernée :<span class="db-name"><a href="#">{{ dbName }}</a></span>
+            Base de données concernée :<span class="db-name">{{ dbName }}</span>
         </h2>
         <div class="loader" v-if="loading">
             <pulse-loader :loading="loading" :color="color" :size="size"></pulse-loader>

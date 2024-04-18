@@ -4,6 +4,7 @@ import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 import axios from 'axios'
 
 const props = defineProps(['dbName'])
+const emit = defineEmits(['updateActiveTab'])
 
 const loading = ref(false)
 const success = ref('')
@@ -86,7 +87,8 @@ const runQuery = async () => {
     <section class="tab-structure" v-if="dbName">
         <h2 class="main-title">
             <img src="../../assets/icons/db.svg" alt="Add" />
-            Base de données concernée :<span class="db-name"><a href="#">{{ dbName }}</a></span>
+            Base de données concernée : <span class="db-name" @click="emit('updateActiveTab')">{{ dbName
+                }}</span>
         </h2>
         <section id="help-buttons">
             <button @click="fillTextarea('SELECT')">

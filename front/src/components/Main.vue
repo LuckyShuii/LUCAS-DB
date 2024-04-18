@@ -15,6 +15,7 @@ const view = ref('database')
 const changeTab = (event) => {
     activeTab.value = event
 }
+
 </script>
 
 <template>
@@ -27,7 +28,7 @@ const changeTab = (event) => {
             </h2>
         </section>
         <Structure v-if="activeTab === 'structure' && dbName" :view="view" :dbName="dbName" />
-        <Query v-if="activeTab === 'query' && dbName" :dbName="dbName" :activeTab="activeTab" />
+        <Query v-if="activeTab === 'query' && dbName" :dbName="dbName" @updateActiveTab="activeTab = 'structure'" />
         <Importer v-if="activeTab === 'importer' && dbName" />
         <Parametres v-if="activeTab === 'parametres' && dbName" />
         <Utilisateurs v-if="activeTab === 'utilisateurs' && dbName" />

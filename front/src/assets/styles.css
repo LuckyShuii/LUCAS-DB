@@ -76,17 +76,18 @@ a:active {
   border-bottom: 1px solid black;
 }
 
-.db-name a {
+.db-name {
   color: var(--main-color);
   font-weight: 500;
   margin-left: 5px;
 }
 
-.db-name a:hover {
+.db-name:hover {
   border-bottom: 1px solid var(--main-color);
+  cursor: pointer;
 }
 
-.db-name a:active {
+.db-name:active {
   border-bottom: 1px solid #000;
   color: #000;
 }
