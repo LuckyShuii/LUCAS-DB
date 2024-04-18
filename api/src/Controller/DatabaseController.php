@@ -154,7 +154,7 @@ class DatabaseController extends AbstractController
     {
         if ($database === 'information_schema' || $database === 'mysql' || $database === 'performance_schema' || $database === 'sys' || $database === 'phpmyadmin' || $database === 'lucasgbd') {
             return $this->json([
-                'error' => 'You cannot drop system databases.',
+                'error' => 'Vous ne pouvez pas supprimer une base de données système.',
             ]);
         }
 

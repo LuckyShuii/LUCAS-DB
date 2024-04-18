@@ -186,6 +186,7 @@ a:active {
 
 .p-dialog-content p {
   margin-top: 1rem;
+  width: 80%;
 }
 
 .p-dialog-title {

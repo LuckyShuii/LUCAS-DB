@@ -2,10 +2,13 @@
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
+import Dialog from 'primevue/dialog';
 import { ref } from 'vue';
 
 const emit = defineEmits(['updateActiveTab', 'setNewDbCreated']);
 const props = defineProps(['dbName']);
+
+const visible = ref(false);
 
 const loading = ref(false);
 
@@ -26,6 +29,7 @@ const dropDb = async () => {
                 showCloseButton: true
             })
             loading.value = false;
+            hideDialog();
             return;
         }
 
@@ -43,6 +47,7 @@ const dropDb = async () => {
             showCloseButton: true
         })
         loading.value = false;
+        hideDialog();
     } catch (error) {
         Swal.fire({
             title: 'Erreur !',
@@ -55,7 +60,17 @@ const dropDb = async () => {
             showCloseButton: true
         })
         loading.value = false;
+        hideDialog();
     }
+}
+
+const hideDialog = () => {
+    visible.value = false;
+}
+
+const displayModal = () => {
+    visible.value = true;
+    console.log("bruh")
 }
 </script>
 
@@ -66,7 +81,7 @@ const dropDb = async () => {
             Base de données concernée : <span class="db-name" @click="emit('updateActiveTab')">{{ dbName
                 }}</span>
         </h2>
-        <button id="drop-db" @click="dropDb" :disabled="loading">
+        <button id="drop-db" @click="displayModal" :disabled="loading">
             <img src="../../assets/icons/drop.svg" alt="Poubelle" id="db-drop" />
             <span>Drop Database</span>
         </button>
@@ -74,9 +89,25 @@ const dropDb = async () => {
             <pulse-loader :loading="loading" :color="color" :size="size"></pulse-loader>
         </div>
     </section>
+    <Dialog modal :closable="false" v-model:visible="visible" header="SUPPRIMER DÉFINTIVEMENT">
+        <p>
+            Etes-vous certain de vouloir supprimer la base de données <span id="db-dialog">{{ dbName }}</span> ?
+            <br><br>
+            Cette action est irréversible.
+        </p>
+        <div class="buttons">
+            <Button class="cancel" type="button" @click="hideDialog">Annuler</Button>
+            <Button type="button" @click="dropDb">Oui</Button>
+        </div>
+    </Dialog>
 </template>
 
 <style scoped>
+#db-dialog {
+    font-weight: 400;
+    text-decoration: underline;
+}
+
 #drop-db {
     background-color: #f84130;
     margin-top: 1rem;
