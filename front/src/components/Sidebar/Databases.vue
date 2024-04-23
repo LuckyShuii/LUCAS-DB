@@ -14,20 +14,24 @@ const activeTableIndex = ref(-1)
 
 const databaseList = ref({})
 
+const notify = (title, text, icon, timer) => {
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: icon,
+        timer: timer,
+        position: 'top-right',
+        toast: true,
+        showConfirmButton: false,
+        showCloseButton: true
+    })
+}
+
 const getDatabaseList = async () => {
     try {
         databaseList.value = await axios.get("http://127.0.0.1:8000/api/databases");
     } catch (err) {
-        Swal.fire({
-            title: 'Error!',
-            text: 'Your database list could not be fetched.',
-            icon: 'error',
-            timer: 10000,
-            position: 'top-right',
-            toast: true,
-            showConfirmButton: false,
-            showCloseButton: true
-        })
+        notify('Erreur !', 'Une erreur est survenue lors de la récupération des bases de données.', 'error', 10000);
     }
 }
 
