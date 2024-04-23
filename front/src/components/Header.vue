@@ -4,7 +4,7 @@ const props = defineProps(['currentUser'])
 
 <template>
     <header>
-        <h1>LUCAS|GBD</h1>
+        <h1>LUCAS|DB</h1>
         <div class="middle-header">
             <p>
                 Utilisateur : {{ currentUser }}
