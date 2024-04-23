@@ -12,22 +12,27 @@ const selectedCollation = ref(null);
 const loading = ref(false);
 const alreadyExists = ref(false);
 
+const notify = (title, text, icon, timer) => {
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: icon,
+        timer: timer,
+        position: 'top-right',
+        toast: true,
+        showConfirmButton: false,
+        showCloseButton: true
+    })
+}
+
 const checkIfDbExists = async (dbName) => {
     try {
         const response = await axios.get('http://localhost:8000/api/database/check/' + dbName);
         console.log(response.data.exists)
         alreadyExists.value = response.data.exists;
     } catch (error) {
-        Swal.fire({
-            title: 'Erreur !',
-            text: 'Votre base de données n\'a pas pu être créée.' + error,
-            icon: 'error',
-            timer: 10000,
-            position: 'top-right',
-            toast: true,
-            showConfirmButton: false,
-            showCloseButton: true
-        })
+        notify('Erreur !', 'Votre base de données n\'a pas pu être créée.', 'error', 10000);
+        loading.value = false;
     }
 }
 
@@ -36,16 +41,7 @@ const createDB = async () => {
     let dbName = document.getElementById('name').value;
 
     if (dbName === '' || selectedCollation.value === null) {
-        Swal.fire({
-            title: 'Erreur !',
-            text: 'Veuillez remplir tous les champs.',
-            icon: 'error',
-            timer: 5000,
-            position: 'top-right',
-            toast: true,
-            showConfirmButton: false,
-            showCloseButton: true
-        })
+        notify('Erreur !', 'Veuillez remplir tous les champs.', 'error', 5000);
         loading.value = false;
         return;
     }
@@ -55,16 +51,7 @@ const createDB = async () => {
     await checkIfDbExists(dbName);
 
     if (alreadyExists.value) {
-        Swal.fire({
-            title: 'Erreur !',
-            text: 'Votre cette base de données existe déjà.',
-            icon: 'error',
-            timer: 5000,
-            position: 'top-right',
-            toast: true,
-            showConfirmButton: false,
-            showCloseButton: true
-        })
+        notify('Erreur !', 'Votre base de données existe déjà.', 'error', 10000);
         loading.value = false;
         return;
     }
@@ -74,32 +61,14 @@ const createDB = async () => {
             dbName: dbName,
             collation: collation
         })
-        Swal.fire({
-            title: 'Succès !',
-            text: 'Votre base de données a été créée avec succès.',
-            icon: 'success',
-            timer: 10000,
-            position: 'top-right',
-            toast: true,
-            showConfirmButton: false,
-            showCloseButton: true
-        })
+        notify('Succès !', 'Votre base de données a bien été créée.', 'success', 5000)
         document.getElementById('name').value = '';
         selectedCollation.value = null;
 
         emit('setNewDbCreated')
         loading.value = false;
     } catch (error) {
-        Swal.fire({
-            title: 'Erreur !',
-            text: 'Votre base de données n\'a pas pu être créée.' + error,
-            icon: 'error',
-            timer: 10000,
-            position: 'top-right',
-            toast: true,
-            showConfirmButton: false,
-            showCloseButton: true
-        })
+        notify('Erreur !', 'Votre base de données n\'a pas pu être créée.', 'error', 10000)
         loading.value = false;
     }
 }

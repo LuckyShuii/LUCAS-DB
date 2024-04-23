@@ -214,6 +214,7 @@ a:active {
 
 .p-dropdown:hover {
   border: 1px solid var(--main-color);
+  cursor: pointer;
 }
 
 .p-dropdown:focus {

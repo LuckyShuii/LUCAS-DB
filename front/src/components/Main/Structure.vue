@@ -11,6 +11,19 @@ const structure = ref([]);
 const success = ref(false);
 const loading = ref(false)
 
+const notify = (title, text, icon, timer) => {
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: icon,
+        timer: timer,
+        position: 'top-right',
+        toast: true,
+        showConfirmButton: false,
+        showCloseButton: true
+    })
+}
+
 const getDatabaseStructure = async () => {
     try {
         const response = await axios.get(`http://localhost:8000/api/database/${props.dbName}`);
@@ -46,16 +59,7 @@ const selectStructure = async (view) => {
                 break;
         }
     } catch (error) {
-        Swal.fire({
-            title: 'Error!',
-            text: 'Your database structure could not be fetched.',
-            icon: 'error',
-            timer: 10000,
-            position: 'top-right',
-            toast: true,
-            showConfirmButton: false,
-            showCloseButton: true
-        })
+        notify('Erreur !', 'Une erreur est survenue.', 'error', 10000);
     }
 };
 

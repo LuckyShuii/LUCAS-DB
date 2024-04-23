@@ -12,22 +12,26 @@ const visible = ref(false);
 
 const loading = ref(false);
 
+const notify = (title, text, icon, timer) => {
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: icon,
+        timer: timer,
+        position: 'top-right',
+        toast: true,
+        showConfirmButton: false,
+        showCloseButton: true
+    })
+}
+
 const dropDb = async () => {
     loading.value = true;
     try {
         const response = await axios.delete('http://localhost:8000/api/database/drop/' + props.dbName);
 
         if (response.data.error) {
-            Swal.fire({
-                title: 'Erreur !',
-                text: response.data.error,
-                icon: 'error',
-                timer: 10000,
-                position: 'top-right',
-                toast: true,
-                showConfirmButton: false,
-                showCloseButton: true
-            })
+            notify('Erreur !', 'Votre base de données n\'a pas pu être supprimée.', 'error', 10000);
             loading.value = false;
             hideDialog();
             return;
@@ -36,29 +40,12 @@ const dropDb = async () => {
         emit('updateActiveTab');
         emit('setNewDbCreated');
 
-        Swal.fire({
-            title: 'Succès !',
-            text: 'Votre base de données a bien été supprimée.',
-            icon: 'success',
-            timer: 5000,
-            position: 'top-right',
-            toast: true,
-            showConfirmButton: false,
-            showCloseButton: true
-        })
+        notify('Succès !', 'Votre base de données a bien été supprimée.', 'success', 5000);
+
         loading.value = false;
         hideDialog();
     } catch (error) {
-        Swal.fire({
-            title: 'Erreur !',
-            text: 'Votre base de données n\'a pas pu être supprimée.' + error,
-            icon: 'error',
-            timer: 10000,
-            position: 'top-right',
-            toast: true,
-            showConfirmButton: false,
-            showCloseButton: true
-        })
+        notify('Erreur !', 'Votre base de données n\'a pas pu être supprimée.', 'error', 10000);
         loading.value = false;
         hideDialog();
     }

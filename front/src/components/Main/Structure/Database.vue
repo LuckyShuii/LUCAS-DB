@@ -13,6 +13,19 @@ const tableToDrop = ref('')
 const tableToEmpty = ref('')
 const responseAPI = ref('')
 
+const notify = (title, text, icon, timer) => {
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: icon,
+        timer: timer,
+        position: 'top-right',
+        toast: true,
+        showConfirmButton: false,
+        showCloseButton: true
+    })
+}
+
 const displayModal = (type, index) => {
     const tableKey = Object.keys(props.structure.tables[index])[0]
     const tableName = props.structure.tables[index][tableKey]
@@ -64,43 +77,17 @@ const makeActionOnTable = async () => {
         }
 
         if (responseAPI.value.error) {
-            Swal.fire({
-                title: 'Erreur !',
-                text: responseAPI.value.error,
-                icon: 'error',
-                timer: 20000,
-                position: 'top-right',
-                toast: true,
-                showConfirmButton: false,
-                showCloseButton: true
-            })
+            notify('Erreur !', 'La table n\'a pas pu être ' + state, 'error', 10000)
+
             hideDialog()
             return;
         }
 
         emit('updateStructure')
 
-        Swal.fire({
-            title: 'Succès !',
-            text: 'La table a été ' + state + ' avec succès.',
-            icon: 'success',
-            timer: 10000,
-            position: 'top-right',
-            toast: true,
-            showConfirmButton: false,
-            showCloseButton: true
-        })
+        notify('Succès !', 'La table a bien été ' + state, 'success', 5000)
     } catch (error) {
-        Swal.fire({
-            title: 'Erreur !',
-            text: 'La table n\'a pas pu être ' + state,
-            icon: 'error',
-            timer: 10000,
-            position: 'top-right',
-            toast: true,
-            showConfirmButton: false,
-            showCloseButton: true
-        })
+        notify('Erreur !', 'La table n\'a pas pu être ' + state, 'error', 10000)
     }
 
     hideDialog()
